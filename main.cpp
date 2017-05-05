@@ -3,6 +3,7 @@
 #include <array>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include "funcoes.h"
 #include "no.h"
 
@@ -18,6 +19,7 @@ int main()
     vector<char> caracteres;
     vector<int> frequenciaChar;
     priority_queue<No *, vector<No *>, CompararNo> filaNos;
+    vector<No *> referenciasNos;
     No * raiz;
 
     // Ler Caracteres da String e transformar em Char
@@ -39,9 +41,32 @@ int main()
     filaNos = montarFila(caracteres, frequenciaChar);
 
     // Montar árvore
-    raiz = montarArvore(filaNos);
+    raiz = montarArvore(filaNos, referenciasNos);
 
-    cout << raiz->direita->direita->direita->getCaractere() << endl;
+    // Gerar codificação dos nós
+    codificarNos(referenciasNos);
+
+    // Ordenar referencias por frequencia
+    sort(referenciasNos.begin(), referenciasNos.end());
+
+    // Codificar mensagem
+    msgCodificada = codificarTexto(msgString, referenciasNos);
+
+    // Gerar dicionario em texto
+    stringstream dicionario;
+    for(unsigned int i = 0; i < caracteres.size(); i++)
+        dicionario << referenciasNos.at(i)->getCaractere() << " = " << referenciasNos.at(i)->codigo << "\n";
+
+    // Concatenar dicionário e mensagem codificada
+    string textoArquivo = "";
+    textoArquivo += dicionario.str();
+    textoArquivo += msgCodificada;
+
+    // Salvar arquivo com dicionário e mensagem
+    salvarArquivo("./saida.txt", textoArquivo);
+
+    // Exibir caracteres, frequencias e códigos
+    cout << textoArquivo << endl;
 
     return 0;
 }

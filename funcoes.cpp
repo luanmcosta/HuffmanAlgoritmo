@@ -61,9 +61,29 @@ void ordenarCaracteresFreq(vector<char> & caracteres, vector<int> & frequencia){
         auxChar = caracteres[menor];
         caracteres[menor] = caracteres[i];
         caracteres[i] = auxChar;
+    }
+}
 
+vector<No *> ordenarVetorNos(vector<No *> & referenciasNos){
+    vector<No *> nos;
+
+    int menor;
+    No * auxJ, * auxMenor;
+
+    for(unsigned int i =0; i < referenciasNos.size(); i++){ // Ordenar com SelectionSort
+        menor = i;
+
+        for(unsigned int j = i+1; j < referenciasNos.size(); j++){
+            auxJ = referenciasNos[i];
+            auxMenor = referenciasNos[menor];
+            if(auxJ->getFrequencia() < auxMenor->getFrequencia())
+                menor = j;
+        }
+
+        nos.push_back(referenciasNos[menor]);
     }
 
+    return nos;
 }
 
 priority_queue<No *, vector<No *>, CompararNo> montarFila(vector<char> & caracteres, vector<int> & frequencia){
@@ -76,7 +96,7 @@ priority_queue<No *, vector<No *>, CompararNo> montarFila(vector<char> & caracte
     return fila;
 }
 
-No * montarArvore(priority_queue<No *, vector<No *>, CompararNo> & fila){
+No * montarArvore(priority_queue<No *, vector<No *>, CompararNo> & fila, vector<No *> & referenciasNos){
 
     No * no1, * no2, * pai;
 
@@ -84,6 +104,12 @@ No * montarArvore(priority_queue<No *, vector<No *>, CompararNo> & fila){
 
         no1 = fila.top(); fila.pop();
         no2 = fila.top(); fila.pop();
+
+        if(no1->isFolha())
+            referenciasNos.push_back(no1);
+        if(no2->isFolha())
+            referenciasNos.push_back(no2);
+
 
         pai = new No(no1, no2);
 
@@ -116,32 +142,78 @@ string carregarArquivo(string arquivo){
     return dados;
 }
 
+void salvarArquivo(string nomeArquivo, string texto){
+    // Instanciar arquivo
+    ofstream arq(nomeArquivo);
 
-/*
-stringstream percorrerArvore(No * no, stringstream codigo, char caractere){
+    // Atribuir dados ao arquivo
+    arq << texto;
 
-    // Caso encontre a folha e essa folha corresponda ao caractere
-    if(no->isFolha() && no->getCaractere() == caractere)
-        return codigo;
-
-    // Percorrer o resto dos nós
-    // Percorrer caso for à esquerda
-    percorrerArvore(no->esquerda, (codigo.putback('0')), caractere);
-
-    // Percorrer caso for à direita
-    percorrerArvore(no->direita, (codigo.putback('1')), caractere);
+    // fechar arquivo
+    arq.close();
 
 }
 
+string codificarCaractere(No * pai){
 
-string buscarLetra(No *raiz, char letra){
-    stringstream cod;
-    cod.flush();
+    No * atual;
+    string codigo = "";
 
-    cod = percorrerArvore(raiz, cod, letra);
+    // Percorrer arvore de cima para baixo, a partir do filho até o pai
+    while(pai->pai != NULL){
+        atual = pai;
+        pai = pai->pai;
 
-    string codigo = cod.str();
+        // Verificar se sou o filho da direita ou da esquerda
+        if(pai->esquerda == atual)
+            codigo += "0";
+        else
+            codigo += "1";
+    }
+
+    // Inverter código (Já que estou gerando de baixo pra cima)
+    reverse(codigo.begin(), codigo.end());
 
     return codigo;
 }
-*/
+
+void codificarNos(vector<No *> nos){
+    No * auxNo, * refNo;
+
+    // Ler todos os filhos(caracteres) e gerar o código
+    for(unsigned int i = 0; i < nos.size(); i++){
+        auxNo = nos[i];
+        refNo = nos[i];
+        refNo->codigo = codificarCaractere(auxNo);
+    }
+}
+
+string buscarCodigo(vector<No *> & dicionario, char caractere){
+    No * auxNo;
+
+    // Percorrer dicionário
+    for(unsigned int i = 0; i < dicionario.size(); i++){
+        // Verificar se há o caractere no dicionario e retornar o código
+        auxNo = dicionario[i];
+        if(auxNo->getCaractere() == caractere)
+            return auxNo->codigo;
+    }
+
+    return "";
+}
+
+string codificarTexto(string msg, vector<No *> & dicionario){
+    string msgCodificada = "";
+    char caractereAtual;
+
+    // Percorrer mensagem completa
+    for(unsigned int i = 0; i < msg.size(); i++){
+        caractereAtual = msg.at(i);
+
+        // Buscar código do caractere atual
+        msgCodificada += buscarCodigo(dicionario, caractereAtual);
+    }
+
+    return msgCodificada;
+}
+

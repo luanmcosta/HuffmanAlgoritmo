@@ -10,6 +10,9 @@ No::No(No * esquerda, No * direita){
     this->direita = direita;
     this->frequencia = esquerda->getFrequencia() + direita->getFrequencia();
     this->caractere = '+';
+    this->pai = NULL;
+    esquerda->pai = this;
+    direita->pai = this;
 }
 
 No::No(char caractere, int frequencia){

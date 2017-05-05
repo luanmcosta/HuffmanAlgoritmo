@@ -18,10 +18,17 @@ public:
     int getFrequencia();
     char getCaractere();
 
+    bool operator < (No& no)
+    {
+        return (this->getFrequencia() < no.getFrequencia());
+    }
+
     char caractere;
     int frequencia;
+    string codigo = "";
     No * esquerda;
     No * direita;
+    No * pai;
 };
 
 class CompararNo{
