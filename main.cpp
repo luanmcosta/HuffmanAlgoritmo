@@ -47,7 +47,7 @@ int main()
     codificarNos(referenciasNos);
 
     // Ordenar referencias por frequencia
-    sort(referenciasNos.begin(), referenciasNos.end());
+    sort(referenciasNos.begin(), referenciasNos.end(), CompararNo());
 
     // Codificar mensagem
     msgCodificada = codificarTexto(msgString, referenciasNos);
