@@ -55,15 +55,20 @@ int main()
     // Gerar dicionario em texto
     stringstream dicionario;
     for(unsigned int i = 0; i < caracteres.size(); i++)
-        dicionario << referenciasNos.at(i)->getCaractere() << " = " << referenciasNos.at(i)->codigo << "\n";
+        dicionario << referenciasNos.at(i)->getCaractere() << "=" << referenciasNos.at(i)->codigo << "\n";
 
-    // Concatenar dicionário e mensagem codificada
+    // Concatenar dados adicionaris, dicionário e mensagem codificada
     string textoArquivo = "";
-    textoArquivo += dicionario.str();
-    textoArquivo += msgCodificada;
+    textoArquivo += to_string(caracteres.size()); // informar qtd de caracteres
+    textoArquivo += "\n";
+    textoArquivo += dicionario.str(); // imprimir dicionario
+    textoArquivo += to_string((8 - (msgCodificada.size() % 8))); // informar o padding (bits restantes para formar o ultimo byte)
+    textoArquivo += "\n";
+    textoArquivo += converterStringBinario(msgCodificada);
 
     // Salvar arquivo com dicionário e mensagem
-    salvarArquivo("./saida.txt", textoArquivo);
+    //salvarArquivo("./saida.txt", textoArquivo);
+    salvarArquivoBin("./saida.bin", textoArquivo);
 
     // Exibir caracteres, frequencias e códigos
     cout << textoArquivo << endl;

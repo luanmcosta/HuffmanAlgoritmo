@@ -7,6 +7,7 @@
 #include<sstream>
 #include<algorithm>
 #include<fstream>
+#include<bitset>
 #include<array>
 #include<queue>
 #include"no.h"
@@ -20,6 +21,12 @@ string carregarArquivo(string arquivo);
 
 // Salvar string em arquivo
 void salvarArquivo(string nomeArquivo, string texto);
+
+// Salvar em arquivo binário
+void salvarArquivoBin(string arquivo, string texto);
+
+// Converter String de Binário para String ASCII
+string converterStringBinario(string texto);
 
 // Ler caracteres (passar de String para um vetor de char)
 vector<char> lerCaracteres(string texto);

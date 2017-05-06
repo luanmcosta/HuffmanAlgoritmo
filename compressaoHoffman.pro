@@ -5,8 +5,10 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     no.cpp \
-    funcoes.cpp
+    funcoes.cpp \
+    decodificar.cpp
 
 HEADERS += \
     no.h \
-    funcoes.h
+    funcoes.h \
+    decodificar.h

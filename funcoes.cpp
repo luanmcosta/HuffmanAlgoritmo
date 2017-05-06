@@ -10,7 +10,6 @@ vector<char> lerCaracteres(string texto)
     return letras;
 }
 
-
 bool verificarCaractere(vector<char> letras, char letra){
 
     for(unsigned int i = 0; i < letras.size(); i++)
@@ -145,6 +144,32 @@ string carregarArquivo(string arquivo){
 void salvarArquivo(string nomeArquivo, string texto){
     // Instanciar arquivo
     ofstream arq(nomeArquivo);
+
+    // Atribuir dados ao arquivo
+    arq << texto;
+
+    // fechar arquivo
+    arq.close();
+
+}
+
+string converterStringBinario(string texto){
+    stringstream sstream(texto);
+    string saida;
+    while(sstream.good())
+    {
+        bitset<8> bits;
+        sstream >> bits;
+        char c = char(bits.to_ulong());
+        saida += c;
+    }
+
+    return saida;
+}
+
+void salvarArquivoBin(string arquivo, string texto){
+    // Instanciar arquivo em modo binário
+    ofstream arq(arquivo);
 
     // Atribuir dados ao arquivo
     arq << texto;
