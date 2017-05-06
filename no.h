@@ -2,9 +2,6 @@
 #define NO_H
 
 #include<iostream>
-#include<vector>
-#include<string>
-#include<array>
 
 using namespace std;
 

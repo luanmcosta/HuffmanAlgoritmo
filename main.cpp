@@ -1,12 +1,6 @@
 #include <iostream>
-#include <vector>
-#include <array>
-#include <string>
-#include <fstream>
-#include <algorithm>
+#include "huffman.h"
 #include "funcoes.h"
-#include "no.h"
-
 
 using namespace std;
 

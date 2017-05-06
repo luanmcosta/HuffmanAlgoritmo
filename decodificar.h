@@ -1,7 +1,7 @@
 #ifndef DECODIFICAR_H
 #define DECODIFICAR_H
 
-#include "funcoes.h"
+#include "huffman.h"
 
 
 string decodificarTexto(string arquivo);
