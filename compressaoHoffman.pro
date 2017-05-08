@@ -6,9 +6,11 @@ CONFIG -= qt
 SOURCES += main.cpp \
     no.cpp \
     funcoes.cpp \
-    decodificar.cpp
+    decodificar.cpp \
+    huffman.cpp
 
 HEADERS += \
     no.h \
     funcoes.h \
-    decodificar.h
+    decodificar.h \
+    huffman.h

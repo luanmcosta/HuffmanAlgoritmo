@@ -1,6 +1,7 @@
 #include <iostream>
 #include "huffman.h"
 #include "funcoes.h"
+#include "decodificar.h"
 
 using namespace std;
 
@@ -49,23 +50,31 @@ int main()
     // Gerar dicionario em texto
     stringstream dicionario;
     for(unsigned int i = 0; i < caracteres.size(); i++)
-        dicionario << referenciasNos.at(i)->getCaractere() << "=" << referenciasNos.at(i)->codigo << "\n";
+        dicionario << referenciasNos.at(i)->getCaractere() << "=" << referenciasNos.at(i)->codigo << ";";
 
     // Concatenar dados adicionaris, dicionário e mensagem codificada
-    string textoArquivo = "";
-    textoArquivo += to_string(caracteres.size()); // informar qtd de caracteres
-    textoArquivo += "\n";
-    textoArquivo += dicionario.str(); // imprimir dicionario
-    textoArquivo += to_string((8 - (msgCodificada.size() % 8))); // informar o padding (bits restantes para formar o ultimo byte)
-    textoArquivo += "\n";
-    textoArquivo += converterStringBinario(msgCodificada);
+    string textoArquivoBin = "";
+    int padding = (8 - (msgCodificada.size() % 8));
+    textoArquivoBin += to_string(caracteres.size()); // informar qtd de caracteres
+    textoArquivoBin += ";";
+    textoArquivoBin += dicionario.str(); // imprimir dicionario
+    textoArquivoBin += to_string(padding); // informar o padding (bits restantes para formar o ultimo byte)
+    textoArquivoBin += ";";
+    // Completar padding
+    for(int i = 0; i < padding; i++)
+        msgCodificada.push_back('0');
+    textoArquivoBin += converterStringBinario(msgCodificada);
 
     // Salvar arquivo com dicionário e mensagem
-    //salvarArquivo("./saida.txt", textoArquivo);
-    salvarArquivoBin("./saida.bin", textoArquivo);
+    salvarArquivoBin("./saida.bin", textoArquivoBin);
 
-    // Exibir caracteres, frequencias e códigos
-    cout << textoArquivo << endl;
+    // Decodificar arquivo
+    string textoDecodificado = decodificarTexto("./saida.bin");
+
+    cout << textoDecodificado << endl;
+
+    // Salvar binario original para comparação posterior
+    salvarArquivo("./binariocodificacao.txt", msgCodificada);
 
     return 0;
 }
